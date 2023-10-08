@@ -12,19 +12,20 @@ unsigned char marge_image[SIZE][SIZE];
 void loadImage ();
 void saveImage ();
 void BW ();
-//void  Invert_Image();
+void  Invert_Image();
 void MergeImage ();
 void Darken_and_Lighten_Image ();
 void Shrink ();
 void Blur ();
-
+void rotate();
 int main()
 {
     loadImage();
 //    BW();
-//    Invert_Image();
+    Invert_Image();
 //    MergeImage();
 //    Darken_and_Lighten_Image();
+      rotate ();
       Shrink ();
 //    Blur ();
     saveImage();
@@ -58,21 +59,13 @@ void saveImage () {
 }
 
 //_________________________________________
-//void  Invert_Image() {
-//    for (int i = 0; i < SIZE; i++) {
-//        for (int j = 0; j< SIZE; j++) {
-//            if (image[i][j]==0){
-//                image[i][j]=255;
-//            }
-//            else if (image[i][j]==255){
-//                image[i][j]=0;
-//            }
-//            else{
-//                image[i][j]=255-image[i][j];
-//            }
-//        }
-//    }
-//}
+void  Invert_Image() {
+   for (int i = 0; i < SIZE; i++) {
+        for (int j = 0; j< SIZE; j++) {
+
+                    image[i][j] = 255-image[i][j];
+        }
+   }}
 
 void BW () {
 
@@ -85,6 +78,47 @@ void BW () {
                 image[i][j] = 0;
         }
     }
+}
+void rotate(){
+
+    int copy [SIZE][SIZE],angle;
+    cout<<"enter the angle you want to rotate to eg. (90,180,270) : ";
+    cin>>angle;
+
+    for (int i = 0; i < SIZE; i++) {
+        for (int j = 0; j < SIZE; j++) {
+
+            copy[i][j] = image[i][j];
+        }
+    }
+    if (angle==180){
+
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+
+                image[i][j]=copy[255-i][255-j];
+            }
+        }
+    }
+    if (angle==270){
+
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+
+                image[i][j]=copy[255-j][255-i];
+            }
+        }
+    }
+    if (angle==90){
+
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+
+                image[i][j]=copy[j][i];
+            }
+        }
+    }
+
 }
 void MergeImage() {
     char second_imageFileName[100];
