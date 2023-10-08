@@ -188,223 +188,109 @@ void Blur () {
             image[i][j] = blur_image[i][j];
         }
     }
-
-
-
-
-//    unsigned char blur_image[SIZE][SIZE] = {'0'};
-//
-//    for (int i = 0; i < SIZE; ++i) {
-//        for (int j = 0; j < SIZE; ++j) {
-//
-//            if(i == 0 && j == 0)
-//            {
-//                unsigned char Xright_corner [] = { '0' ,'0' , '1' , '1' , '0' , '1' , '2' , '2' , '2' };
-//                unsigned char Yright_corner [] = { '0' ,'1' , '1' , '0' , '2' , '2' , '2' , '1' , '0' };
-//
-//                for (int k = 0; k < 9; ++k)
-//
-//                    blur_image[i][j] += image[i + Xright_corner][j + Yright_corner];
-//
-//
-//                blur_image[i][j] /= 9;
-////                blur_image[i][j] = (image[i][j] + image[i][j+1] + image[i+1][j] + image[i+1][j+1]) / 4;
-//            }
-//            else if (i == 0 && j == 254)
-//            {
-//                int Xright_corner [] = { 0 ,0 , 1 , 1 , 0 , 1 , 2 , 2 , 2 };
-//                int Yright_corner [] = { 0 ,-1 , -1 , 0 , -2 , -2 , -2 , -1 , 0 };
-//
-//
-//                blur_image[i][j] = (image[i][j] + image[i][j-1] + image[i+1][j] + image[i+1][j-1]) / 4;
-//            }
-//            else if (i == 254 && j == 0)
-//            {
-//                blur_image[i][j] = (image[i][j] + image[i][j+1] + image[i-1][j] + image[i-1][j+1]) / 4;
-//
-//            }
-//            else if (i == 254 && j == 254)
-//            {
-//                blur_image[i][j] = (image[i][j] + image[i][j-1] + image[i-1][j] + image[i-1][j-1]) / 4;
-//
-//            }
-//
-//            else if (i == 0 && j > 0 && j < 254)
-//            {
-//                blur_image[i][j] = (image[i][j] + image[i][j-1]  + image[i][j+1] + image[i+1][j-1] + image[i+1][j] + image[i+1][j+1]) / 6;
-//
-//            }
-//            else if (i == 254 && j > 0 && j < 254)
-//            {
-//                blur_image[i][j] = (image[i][j] + image[i][j-1]  + image[i][j+1] + image[i-1][j-1] + image[i-1][j] + image[i-1][j+1]) / 6;
-//
-//            }
-//            else if (j == 0 && i > 0 && i < 254)
-//            {
-//                blur_image[i][j] = (image[i][j] + image[i-1][j]  + image[i+1][j] + image[i-1][j+1] + image[i][j+1] + image[i+1][j+1]) / 6;
-//
-//            }
-//            else if (j== 254 && i > 0 && i < 254)
-//            {
-//                blur_image[i][j] = (image[i][j] + image[i-1][j]  + image[i+1][j] + image[i-1][j-1] + image[i][j-1] + image[i+1][j-1]) / 6;
-//
-//            }
-//            else
-//            {
-//                blur_image[i][j] = (image[i][j] + image[i-1][j-1] + image[i-1][j] + image[i-1][j+1] + image[i][j-1] + image[i][j+1] + image[i+1][j-1] + image[i+1][j] + image[i+1][j+1]) / 9;
-//            }
-//        }
-//    }
-//
-//    for (int i = 0; i < SIZE; ++i) {
-//        for (int j = 0; j < SIZE; ++j) {
-//
-//            image[i][j] = blur_image[i][j];
-//        }
-//    }
 }
-//
-//void Shrink () {
-//
-//    unsigned char sheinked_image[SIZE][SIZE];
-//
-//    for (int i = 0; i < SIZE; ++i) {
-//        for (int j = 0; j < SIZE-1; ++j) {
-//
-//            sheinked_image[i][j] = (image[i][j] + image[i][j+1]) / 2;
-//        }
-//    }
-//
-//    for (int i = 0; i < SIZE; ++i) {
-//        for (int j = 0; j < SIZE-1; ++j) {
-//
-//            image[i][j] = sheinked_image[i][j];
-//        }
-//    }
-//}
+
+ void Shrink() {
+
+        unsigned char first_shrinked_image[SIZE][SIZE];
+        unsigned char second_shrinked_image[SIZE][SIZE];
 
 
+        int shrink_by;
+        cout << "shrik by haif (2) or by third (3) or by quarter (4) : ";
+        cin >> shrink_by;
 
-void Shrink () {
+        if (shrink_by == 2) {
+            int t = 0;
+            for (int i = 0; i < SIZE - 1; i += 2) {
+                int c = 0;
 
-    unsigned char first_shrinked_image[SIZE][SIZE];
-    unsigned char second_shrinked_image[SIZE][SIZE];
-
-
-    int shrink_by ;
-    cout << "shrik by haif (2) or by third (3) or by quarter (4) : ";
-    cin >> shrink_by;
-
-    if (shrink_by == 2)
-    {
-        int t = 0;
-        for (int i = 0; i < SIZE-1; i+=2) {
-            int c = 0;
-
-            for (int j = 0; j < SIZE-1; j+=2) {
-                first_shrinked_image[t][c] = (image[i][j] + image[i][j + 1] + image[i+1][j] + image[i+1][j+1]) / 4;
-                c++;
-            }
-            t++;
-        }
-
-
-        for (int i = 0; i < SIZE; ++i) {
-            for (int j = 0; j < SIZE; ++j) {
-
-                if(i < 127 && j < 127)
-                {
-                    image[i][j] = first_shrinked_image[i][j];
+                for (int j = 0; j < SIZE - 1; j += 2) {
+                    first_shrinked_image[t][c] =
+                            (image[i][j] + image[i][j + 1] + image[i + 1][j] + image[i + 1][j + 1]) / 4;
+                    c++;
                 }
+                t++;
+            }
 
-                else
-                {
-                    image[i][j] = 255;
+
+            for (int i = 0; i < SIZE; ++i) {
+                for (int j = 0; j < SIZE; ++j) {
+
+                    if (i < 127 && j < 127) {
+                        image[i][j] = first_shrinked_image[i][j];
+                    } else {
+                        image[i][j] = 255;
+                    }
                 }
             }
-        }
-    }
-
-    else if (shrink_by == 3)
-    {
-        int t = 0 ;
-        for (int i = 0; i < SIZE-2; i+=3) {
-            int c = 0;
-            for (int j = 0; j < SIZE-2; j+=3) {
-                int sum = 0;
-                int s = 0;
+        } else if (shrink_by == 3) {
+            int t = 0;
+            for (int i = 0; i < SIZE - 2; i += 3) {
+                int c = 0;
+                for (int j = 0; j < SIZE - 2; j += 3) {
+                    int sum = 0;
+                    int s = 0;
 
 //                first_shrinked_image[t][c] = (image[i][j] + image[i][j + 1] + image[i+1][j] + image[i+1][j+1]) / 4;
 //                c++;
-                for (int k = i; k < i+3; ++k) {
-                    for (int l = j; l < j+3; ++l) {
-                        sum += image[k][l];
-                        s++;
+                    for (int k = i; k < i + 3; ++k) {
+                        for (int l = j; l < j + 3; ++l) {
+                            sum += image[k][l];
+                            s++;
+                        }
+                    }
+
+                    first_shrinked_image[t][c] = sum / s;
+                    c++;
+                }
+                t++;
+            }
+
+            for (int i = 0; i < SIZE; ++i) {
+                for (int j = 0; j < SIZE; ++j) {
+
+                    if (i < 85 && j < 85) {
+                        image[i][j] = first_shrinked_image[i][j];
+                    } else {
+                        image[i][j] = 255;
                     }
                 }
-
-                first_shrinked_image[t][c] = sum/s;
-                c++;
             }
-            t++;
-        }
-
-        for (int i = 0; i < SIZE; ++i) {
-            for (int j = 0; j < SIZE; ++j) {
-
-                if(i < 85 && j < 85)
-                {
-                    image[i][j] = first_shrinked_image[i][j];
-                }
-
-                else
-                {
-                    image[i][j] = 255;
-                }
-            }
-        }
-    }
-
-
-    else if (shrink_by == 4)
-    {
-        int t = 0 ;
-        for (int i = 0; i < SIZE-3; i+=4) {
-            int c = 0;
-            for (int j = 0; j < SIZE-3; j+=4) {
-                int sum = 0;
-                int s = 0;
+        } else if (shrink_by == 4) {
+            int t = 0;
+            for (int i = 0; i < SIZE - 3; i += 4) {
+                int c = 0;
+                for (int j = 0; j < SIZE - 3; j += 4) {
+                    int sum = 0;
+                    int s = 0;
 
 //                first_shrinked_image[t][c] = (image[i][j] + image[i][j + 1] + image[i+1][j] + image[i+1][j+1]) / 4;
 //                c++;
-                for (int k = i; k < i+4; ++k) {
-                    for (int l = j; l < j+4; ++l) {
-                        sum += image[k][l];
-                        s++;
+                    for (int k = i; k < i + 4; ++k) {
+                        for (int l = j; l < j + 4; ++l) {
+                            sum += image[k][l];
+                            s++;
+                        }
+                    }
+
+                    first_shrinked_image[t][c] = sum / s;
+                    c++;
+                }
+                t++;
+            }
+
+            for (int i = 0; i < SIZE; ++i) {
+                for (int j = 0; j < SIZE; ++j) {
+
+                    if (i < 64 && j < 64) {
+                        image[i][j] = first_shrinked_image[i][j];
+                    } else {
+                        image[i][j] = 255;
                     }
                 }
-
-                first_shrinked_image[t][c] = sum/s;
-                c++;
-            }
-            t++;
-        }
-
-        for (int i = 0; i < SIZE; ++i) {
-            for (int j = 0; j < SIZE; ++j) {
-
-                if(i < 64 && j < 64)
-                {
-                    image[i][j] = first_shrinked_image[i][j];
-                }
-
-                else
-                {
-                    image[i][j] = 255;
-                }
             }
         }
+
+
     }
-
-
-}
