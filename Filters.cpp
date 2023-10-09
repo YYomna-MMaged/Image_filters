@@ -77,15 +77,15 @@ void Filters() {
 
     int n_of_filter;
 
-    cout << "Enter number of filter you need :"
-            "(1) Black & White Filter"
-            "(2) Invert Filter"
-            "(3) Merge Filter"
-            "(4) Flip Image"
-            "(5) Darken and Lighten Filter"
-            "(6) Rotate Filter"
-            "(9) Shrink Filter"
-            "(12) Blur Filter" << '\n';
+    cout << "Enter number of filter you need :" << '\n'
+         << "(1) Black & White Filter " << '\n'
+         << "(2) Invert Filter" << '\n'
+         << "(3) Merge Filter" << '\n'
+         << "(4) Flip Image" << '\n'
+         << "(5) Darken and Lighten Filter" << '\n'
+         << "(6) Rotate Filter" << '\n'
+         << "(9) Shrink Filter" << '\n'
+         << "(12) Blur Filter" << '\n';
 
     cin >> n_of_filter;
 
