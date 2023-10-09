@@ -37,6 +37,8 @@ void darken_and_lighten ();
 void rotate_image ();
 void shrink_image ();
 void blur_image ();
+
+
 int main()
 {
     loadImage();
@@ -306,21 +308,25 @@ void rotate_image () {
 
 void shrink_image() {
 
+//  2D array to store the image inside it during shrinking
     unsigned char shrinked_image[SIZE][SIZE];
+
+//  A variable to store inside the type of reduction that the user wants (half, quarter, third)
     int shrink_by;
 
-    cout << "shrik by haif (2) or by third (3) or by quarter (4) : ";
+    cout << "shrik by half (2) or by third (3) or by quarter (4) : ";
     cin >> shrink_by;
 
+//  if the user choose half
     if (shrink_by == 2) {
-        int row = 0;
+        int row = 0; // the row we are in
         for (int i = 0; i < SIZE - 1; i += 2) {
-            int column = 0;
+            int column = 0; // the column we are in
 
             for (int j = 0; j < SIZE - 1; j += 2) {
 
-                int sum = 0;
-                int counter = 0;
+                int sum = 0; //Here the values of the pixels that will be shrinked into one pixel are stored
+                int counter = 0; //The number of pixels to be shrinked (and in this case will be 4)
 
                 for (int k = i; k < i + 2; ++k) {
                     for (int l = j; l < j + 2; ++l) {
@@ -330,20 +336,22 @@ void shrink_image() {
                     }
                 }
 
-                shrinked_image[row][column] = sum / counter;
-                column++;
+                shrinked_image[row][column] = sum / counter; // The sum of the pixel valuse is divided by their number to get the average
+                column++; // Move to the next column
             }
-            row++;
+            row++; // Move to the next row
         }
 
-
+//      move the image in (shrinked_image) to (image) to be displayed
         for (int i = 0; i < SIZE; ++i) {
             for (int j = 0; j < SIZE; ++j) {
 
+//              Because we are reducing by half, all pixels will be present from (0,0) until (127,127)
                 if (i < 127 && j < 127) {
                     image[i][j] = shrinked_image[i][j];
                 }
 
+//              otherwise , white pixels will apper
                 else {
                     image[i][j] = 255;
                 }
@@ -351,15 +359,17 @@ void shrink_image() {
         }
     }
 
+//  if the user choose third
     else if (shrink_by == 3) {
 
-        int row = 0;
+        int row = 0; // the row we are in
         for (int i = 0; i < SIZE - 2; i += 3) {
-            int column = 0;
+            int column = 0; // the column we are in
 
             for (int j = 0; j < SIZE - 2; j += 3) {
-                int sum = 0;
-                int counter = 0;
+
+                int sum = 0; //Here the values of the pixels that will be shrinked into one pixel are stored
+                int counter = 0; //The number of pixels to be shrinked (and in this case will be 9);
 
                 for (int k = i; k < i + 3; ++k) {
                     for (int l = j; l < j + 3; ++l) {
@@ -369,33 +379,39 @@ void shrink_image() {
                     }
                 }
 
-                shrinked_image[row][column] = sum / counter;
-                column++;
+                shrinked_image[row][column] = sum / counter; // The sum of the pixel valuse is divided by their number to get the average
+                column++; // Move to the next column
             }
-            row++;
+            row++; // Move to the next row
         }
 
+//      move the image in (shrinked_image) to (image) to be displayed
         for (int i = 0; i < SIZE; ++i) {
             for (int j = 0; j < SIZE; ++j) {
 
+//              Because we are reducing by half, all pixels will be present from (0,0) until (85,85)
                 if (i < 85 && j < 85) {
                     image[i][j] = shrinked_image[i][j];
-                } else {
+                }
+
+//              otherwise , white pixels will apper
+                else {
                     image[i][j] = 255;
                 }
             }
         }
     }
 
+//  if the user choose quarter
     else if (shrink_by == 4) {
 
-        int row = 0;
+        int row = 0; // the row we are in
         for (int i = 0; i < SIZE - 3; i += 4) {
-            int column = 0;
+            int column = 0; // the column we are in
 
             for (int j = 0; j < SIZE - 3; j += 4) {
-                int sum = 0;
-                int counter = 0;
+                int sum = 0; //Here the sum of the values of the pixels that will be shrinked into one pixel are stored
+                int counter = 0; //The number of pixels to be shrinked (and in this case will be 16);
 
                 for (int k = i; k < i + 4; ++k) {
                     for (int l = j; l < j + 4; ++l) {
@@ -404,18 +420,23 @@ void shrink_image() {
                     }
                 }
 
-                shrinked_image[row][column] = sum / counter;
-                column++;
+                shrinked_image[row][column] = sum / counter; // The sum of the pixel valuse is divided by their number to get the average
+                column++; // Move to the next column
             }
-            row++;
+            row++; // Move to the next row
         }
 
+//      move the image in (shrinked_image) to (image) to be displayed
         for (int i = 0; i < SIZE; ++i) {
             for (int j = 0; j < SIZE; ++j) {
 
+//              Because we are reducing by half, all pixels will be present from (0,0) until (64,64)
                 if (i < 64 && j < 64) {
                     image[i][j] = shrinked_image[i][j];
-                } else {
+                }
+
+//              otherwise , white pixels will apper
+                else {
                     image[i][j] = 255;
                 }
             }
@@ -425,13 +446,16 @@ void shrink_image() {
 
 void blur_image () {
 
+//  2D array to store the image inside it during process of blurring
     unsigned char blur_image[SIZE][SIZE];
 
     for (int i = 0; i < SIZE; ++i) {
         for (int j = 0; j < SIZE; ++j) {
-            int sum_of_pixels = 0;
-            int n_pixels = 0;
+            int sum_of_pixels = 0; //Here the sum of the values of the pixels that around the pixel needed to blur are stored
+            int n_pixels = 0; //The number of pixels around the desired pixel
 
+//          We pass through a certain number of rows and columns around the pixels that we want to blur to get their values
+//          This number can be change depending on the desired degree of blurring (reduce it to reduce blur and vice versa)
             for (int x = -3; x <= 3; ++x) {
                 for (int y = -3; y <= 3; ++y) {
                     int row_of_pixel = i + x;
@@ -446,10 +470,11 @@ void blur_image () {
             }
 
 
-            blur_image[i][j] = sum_of_pixels / n_pixels;
+            blur_image[i][j] = sum_of_pixels / n_pixels; // The sum of the pixel valuse is divided by their number to get the average
         }
     }
 
+//  move the image in (blur_image) to (image) to be displayed
     for (int i = 0; i < SIZE; ++i) {
         for (int j = 0; j < SIZE; ++j) {
             image[i][j] = blur_image[i][j];
