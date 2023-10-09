@@ -59,6 +59,32 @@ void saveImage () {
 }
 
 //_________________________________________
+ void doSomethingForImage (){
+  for (int i = 0; i < SIZE; i++) {
+    for (int j = 0; j< SIZE; j++) {
+
+
+        if (image[i][j] > 127)
+            image[i][j] = 255;
+        else
+            image[i][j] = 0;
+
+    }
+   }
+}
+//--------------------------------------------
+//Example code to flip the image horizontally(0) or vertically(1) as a mirror
+void flipImage (){
+
+    cout << "Enter if image horizontally(h) or vertically(v): ";
+    char hv;
+    cin >>hv;
+    if (hv == 'v')
+        for (int i = 0; i < SIZE/2; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                swap(image[i][j], image[256 - i][j]);
+            }
+        }
 void  Invert_Image() {
    for (int i = 0; i < SIZE; i++) {
         for (int j = 0; j< SIZE; j++) {
