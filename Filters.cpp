@@ -22,10 +22,10 @@ int main()
 {
     loadImage();
 //    BW();
-    Invert_Image();
+//    Invert_Image();
 //    MergeImage();
 //    Darken_and_Lighten_Image();
-      rotate ();
+//      rotate ();
       Shrink ();
 //    Blur ();
     saveImage();
