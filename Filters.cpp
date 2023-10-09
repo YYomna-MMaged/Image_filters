@@ -1,4 +1,21 @@
 
+/*
+ * Student 1 :
+ *    name : Yomna Maged ALi
+ *    email : yomna1472004@gmail.com
+ *    ID : 20221196
+ *
+ * Student 2 :
+ *    name : Rawan Amr Nabil
+ *    email : Rawanmontash453@gmail.com
+ *    ID : 20221062
+ *
+ * Student 3 :
+ *    name : Tasneem Mamdouh Mansy
+ *    email : tasneem.mansy1@gmail.com
+ *    ID : 20221041
+ *
+ * */
 #include <iostream>
 #include <fstream>
 #include <cstring>
@@ -7,27 +24,23 @@
 
 using namespace std;
 unsigned char image[SIZE][SIZE];
-unsigned char marge_image[SIZE][SIZE];
+
+void Filters ();
 
 void loadImage ();
 void saveImage ();
-void BW ();
-void  Invert_Image();
+void Black_White ();
+void Invert_Image ();
 void MergeImage ();
-void Darken_and_Lighten_Image ();
+void FlipImage ();
+void Darken_and_Lighten ();
+void Rotate ();
 void Shrink ();
 void Blur ();
-void rotate();
 int main()
 {
     loadImage();
-//    BW();
-//    Invert_Image();
-//    MergeImage();
-//    Darken_and_Lighten_Image();
-//      rotate ();
-      Shrink ();
-//    Blur ();
+    Filters();
     saveImage();
     return 0;
 }
@@ -59,57 +72,192 @@ void saveImage () {
 }
 
 //_________________________________________
- void doSomethingForImage (){
-  for (int i = 0; i < SIZE; i++) {
-    for (int j = 0; j< SIZE; j++) {
 
+void Filters() {
 
-        if (image[i][j] > 127)
-            image[i][j] = 255;
-        else
-            image[i][j] = 0;
+    int n_of_filter;
 
+    cout << "Enter number of filter you need :"
+            "(1) Black & White Filter"
+            "(2) Invert Filter"
+            "(3) Merge Filter"
+            "(4) Flip Image"
+            "(5) Darken and Lighten Filter"
+            "(6) Rotate Filter"
+            "(9) Shrink Filter"
+            "(12) Blur Filter" << '\n';
+
+    cin >> n_of_filter;
+
+    if (n_of_filter == 1)
+    {
+        Black_White ();
     }
-   }
+    else if (n_of_filter == 2)
+    {
+        Invert_Image();
+    }
+    else if (n_of_filter == 3)
+    {
+        MergeImage();
+    }
+    else if (n_of_filter == 4)
+    {
+        FlipImage();
+    }
+    else if (n_of_filter == 5)
+    {
+        Darken_and_Lighten ();
+    }
+    else if (n_of_filter == 6)
+    {
+        Rotate ();
+    }
+    else if (n_of_filter == 9)
+    {
+        Shrink ();
+    }
+    else if (n_of_filter == 12)
+    {
+        Blur ();
+    }
+
+}
+
+//--------------------------------------------
+//this process make the image black and white only
+void Black_White (){
+    for (int i = 0; i < SIZE; i++) {
+        for (int j = 0; j< SIZE; j++) {
+
+            //we put the avarge to check if pixel more than 127 to convert to white
+            if (image[i][j] > 127)
+                image[i][j] = 255;
+
+            //pixel turned to black if it less than 127
+            else
+                image[i][j] = 0;
+
+        }
+    }
 }
 //--------------------------------------------
-void flipImage () {
 
-    cout << "Enter if image horizontally(h) or vertically(v): ";
-    char hv;
-    cin >> hv;
-    if (hv == 'v')
+void Invert_Image() {
+
+    for (int i = 0; i < SIZE; i++) {
+        for (int j = 0; j< SIZE; j++) {
+
+            image[i][j] = 255-image[i][j];
+        }
+    }
+}
+
+//--------------------------------------------
+
+void MergeImage() {
+
+//    A variable to store the second image to be merged with the first image
+    unsigned char marge_image[SIZE][SIZE];
+    char Merged_image[100];
+
+    cout << "Please enter the name of the image file to merge with: ";
+    cin >> Merged_image;
+
+//    Read the second image and store it in (marge_image)
+    strcat(Merged_image, ".bmp");
+    readGSBMP(Merged_image, marge_image);
+
+//    Marge the two image in (image)
+    for (int i = 0; i < SIZE; i++) {
+        for (int j = 0; j < SIZE; j++) {
+            image[i][j] = (marge_image[i][j] + image[i][j]) / 2;
+        }
+    }
+
+}
+
+//--------------------------------------------
+
+// flip image (h)orizontly or (v)ertically(v)
+void FlipImage () {
+
+    cout << "Flip (H)orizontally or (V)ertically ? ";
+
+    char H_or_V; // User enter an charachter to choice the type (H or V)
+    cin >> H_or_V;
+    if (H_or_V == 'V') //if it vertical we make a loop in half of i and j as a matrix to swap
+    {
         for (int i = 0; i < SIZE / 2; i++) {
             for (int j = 0; j < SIZE; j++) {
+
+                //we will swap column in the another direction so the same column of the pixel is changing and j still its number
                 swap(image[i][j], image[256 - i][j]);
+
+            }
+        }
+    }
+
+    else if (H_or_V == 'H') //if it horizontal we make a loop in half of j and i as a matrix
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE / 2; j++)
+            {
+
+                //we will swap row in the another direction so the same row of the pixel is changing and i still its number
+                swap (image[i][j] , image[i][256 - j]);
             }
         }
 }
 
-void  Invert_Image() {
-   for (int i = 0; i < SIZE; i++) {
-        for (int j = 0; j< SIZE; j++) {
+//--------------------------------------------
 
-                    image[i][j] = 255-image[i][j];
-        }
-   }}
+void Darken_and_Lighten () {
 
-void BW () {
+// Variable to store what the user wants (lighten or darken)
+    char d_OR_l;
 
-    for (int i = 0; i < SIZE; ++i) {
-        for (int j = 0; j < SIZE; ++j) {
+    cout << "Do you want to (d)arken or (l)ighten? ";
+    cin >> d_OR_l;
 
-            if(image[i][j] > 127)
-                image[i][j] = 255;
-            else
-                image[i][j] = 0;
+//    If user choose darken
+    if(d_OR_l == 'd')
+    {
+
+        for (int i = 0; i < SIZE; ++i) {
+            for (int j = 0; j < SIZE; ++j) {
+
+//            Reduce the pixel brightness by half to get closer to zero (black)
+                image[i][j] = image[i][j] / 2;
+            }
         }
     }
+//    If user choose lighten
+    if(d_OR_l == 'l')
+    {
+
+        for (int i = 0; i < SIZE; ++i) {
+            for (int j = 0; j < SIZE; ++j) {
+
+//              Increase the pixel brightness by adding half the desired value to reach 255 (white)
+//              to ensure that there will be no overflow after adding
+                image[i][j] += (255 - image[i][j]) / 2;
+
+            }
+        }
+    }
+
+    else
+    {
+        cout << "Invalid char.";
+    }
 }
-void rotate(){
+
+//--------------------------------------------
+
+void Rotate () {
 
     int copy [SIZE][SIZE],angle;
-    cout<<"enter the angle you want to rotate to eg. (90,180,270) : ";
+    cout<<"enter the angle you want to Rotate to eg. (90,180,270) : ";
     cin>>angle;
 
     for (int i = 0; i < SIZE; i++) {
@@ -118,6 +266,7 @@ void rotate(){
             copy[i][j] = image[i][j];
         }
     }
+
     if (angle==180){
 
         for (int i = 0; i < SIZE; i++) {
@@ -127,7 +276,7 @@ void rotate(){
             }
         }
     }
-    if (angle==270){
+    else if (angle==270){
 
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
@@ -136,7 +285,7 @@ void rotate(){
             }
         }
     }
-    if (angle==90){
+    else if (angle==90){
 
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
@@ -147,73 +296,125 @@ void rotate(){
     }
 
 }
-void MergeImage() {
-    char second_imageFileName[100];
 
-    cout << "Please enter the name of the image file to merge with: ";
-    cin >> second_imageFileName;
+//--------------------------------------------
 
-    strcat(second_imageFileName, ".bmp");
-    readGSBMP(second_imageFileName, marge_image);
+void Shrink() {
 
-    // Attempt to load the second image
-//    if (!readGSBMP(second_imageFileName, marge_image)) {
-//        cout << "Error loading the second image." << endl;
-//        return;
-//    }
+    unsigned char shrinked_image[SIZE][SIZE];
+    int shrink_by;
 
-    // Check if the dimensions of the two images match
-//    if (marge_image.size() != SIZE || marge_image[0].size() != SIZE) {
-//        cout << "Image dimensions do not match. Cannot merge." << endl;
-//        return;
-//    }
+    cout << "shrik by haif (2) or by third (3) or by quarter (4) : ";
+    cin >> shrink_by;
 
-    // Merge the images by calculating the average pixel value
-    for (int i = 0; i < SIZE; i++) {
-        for (int j = 0; j < SIZE; j++) {
-            image[i][j] = (marge_image[i][j] + image[i][j]) / 2;
+    if (shrink_by == 2) {
+        int row = 0;
+        for (int i = 0; i < SIZE - 1; i += 2) {
+            int column = 0;
+
+            for (int j = 0; j < SIZE - 1; j += 2) {
+
+                int sum = 0;
+                int counter = 0;
+
+                for (int k = i; k < i + 2; ++k) {
+                    for (int l = j; l < j + 2; ++l) {
+
+                        sum += image[k][l];
+                        counter++;
+                    }
+                }
+
+                shrinked_image[row][column] = sum / counter;
+                column++;
+            }
+            row++;
         }
-    }
 
-    // Optionally, you can save or display the merged image here.
-}
-
-void Darken_and_Lighten_Image () {
-
-    char d_OR_l;
-
-    cout << "Do you want to (d)arken or (l)ighten? ";
-    cin >> d_OR_l;
-
-
-    if(d_OR_l == 'd')
-    {
 
         for (int i = 0; i < SIZE; ++i) {
             for (int j = 0; j < SIZE; ++j) {
 
-                image[i][j] = image[i][j] / 2;
-//                image[i][j] -= image[i][j] / (10/7);
+                if (i < 127 && j < 127) {
+                    image[i][j] = shrinked_image[i][j];
+                }
+
+                else {
+                    image[i][j] = 255;
+                }
             }
         }
     }
 
-    if(d_OR_l == 'l')
-    {
+    else if (shrink_by == 3) {
+
+        int row = 0;
+        for (int i = 0; i < SIZE - 2; i += 3) {
+            int column = 0;
+
+            for (int j = 0; j < SIZE - 2; j += 3) {
+                int sum = 0;
+                int counter = 0;
+
+                for (int k = i; k < i + 3; ++k) {
+                    for (int l = j; l < j + 3; ++l) {
+
+                        sum += image[k][l];
+                        counter++;
+                    }
+                }
+
+                shrinked_image[row][column] = sum / counter;
+                column++;
+            }
+            row++;
+        }
 
         for (int i = 0; i < SIZE; ++i) {
             for (int j = 0; j < SIZE; ++j) {
 
-//                image[i][j] -= 255;
-                image[i][j] += (255 - image[i][j]) / 2;
-
+                if (i < 85 && j < 85) {
+                    image[i][j] = shrinked_image[i][j];
+                } else {
+                    image[i][j] = 255;
+                }
             }
         }
     }
 
-    else
-    {
-        cout << "Invalid char.";
+    else if (shrink_by == 4) {
+
+        int row = 0;
+        for (int i = 0; i < SIZE - 3; i += 4) {
+            int column = 0;
+
+            for (int j = 0; j < SIZE - 3; j += 4) {
+                int sum = 0;
+                int counter = 0;
+
+                for (int k = i; k < i + 4; ++k) {
+                    for (int l = j; l < j + 4; ++l) {
+                        sum += image[k][l];
+                        counter++;
+                    }
+                }
+
+                shrinked_image[row][column] = sum / counter;
+                column++;
+            }
+            row++;
+        }
+
+        for (int i = 0; i < SIZE; ++i) {
+            for (int j = 0; j < SIZE; ++j) {
+
+                if (i < 64 && j < 64) {
+                    image[i][j] = shrinked_image[i][j];
+                } else {
+                    image[i][j] = 255;
+                }
+            }
+        }
     }
 }
 
@@ -228,12 +429,12 @@ void Blur () {
 
             for (int x = -3; x <= 3; ++x) {
                 for (int y = -3; y <= 3; ++y) {
-                    int ni = i + x;
-                    int nj = j + y;
+                    int row_of_pixel = i + x;
+                    int column_of_pixel = j + y;
 
 
-                    if (ni >= 0 && ni < SIZE && nj >= 0 && nj < SIZE) {
-                        sum_of_pixels += image[ni][nj];
+                    if (row_of_pixel >= 0 && row_of_pixel < SIZE && column_of_pixel >= 0 && column_of_pixel < SIZE) {
+                        sum_of_pixels += image[row_of_pixel][column_of_pixel];
                         n_pixels++;
                     }
                 }
@@ -251,107 +452,3 @@ void Blur () {
     }
 }
 
- void Shrink() {
-
-        unsigned char first_shrinked_image[SIZE][SIZE];
-        unsigned char second_shrinked_image[SIZE][SIZE];
-
-
-        int shrink_by;
-        cout << "shrik by haif (2) or by third (3) or by quarter (4) : ";
-        cin >> shrink_by;
-
-        if (shrink_by == 2) {
-            int t = 0;
-            for (int i = 0; i < SIZE - 1; i += 2) {
-                int c = 0;
-
-                for (int j = 0; j < SIZE - 1; j += 2) {
-                    first_shrinked_image[t][c] =
-                            (image[i][j] + image[i][j + 1] + image[i + 1][j] + image[i + 1][j + 1]) / 4;
-                    c++;
-                }
-                t++;
-            }
-
-
-            for (int i = 0; i < SIZE; ++i) {
-                for (int j = 0; j < SIZE; ++j) {
-
-                    if (i < 127 && j < 127) {
-                        image[i][j] = first_shrinked_image[i][j];
-                    } else {
-                        image[i][j] = 255;
-                    }
-                }
-            }
-        } else if (shrink_by == 3) {
-            int t = 0;
-            for (int i = 0; i < SIZE - 2; i += 3) {
-                int c = 0;
-                for (int j = 0; j < SIZE - 2; j += 3) {
-                    int sum = 0;
-                    int s = 0;
-
-//                first_shrinked_image[t][c] = (image[i][j] + image[i][j + 1] + image[i+1][j] + image[i+1][j+1]) / 4;
-//                c++;
-                    for (int k = i; k < i + 3; ++k) {
-                        for (int l = j; l < j + 3; ++l) {
-                            sum += image[k][l];
-                            s++;
-                        }
-                    }
-
-                    first_shrinked_image[t][c] = sum / s;
-                    c++;
-                }
-                t++;
-            }
-
-            for (int i = 0; i < SIZE; ++i) {
-                for (int j = 0; j < SIZE; ++j) {
-
-                    if (i < 85 && j < 85) {
-                        image[i][j] = first_shrinked_image[i][j];
-                    } else {
-                        image[i][j] = 255;
-                    }
-                }
-            }
-        } else if (shrink_by == 4) {
-            int t = 0;
-            for (int i = 0; i < SIZE - 3; i += 4) {
-                int c = 0;
-                for (int j = 0; j < SIZE - 3; j += 4) {
-                    int sum = 0;
-                    int s = 0;
-
-//                first_shrinked_image[t][c] = (image[i][j] + image[i][j + 1] + image[i+1][j] + image[i+1][j+1]) / 4;
-//                c++;
-                    for (int k = i; k < i + 4; ++k) {
-                        for (int l = j; l < j + 4; ++l) {
-                            sum += image[k][l];
-                            s++;
-                        }
-                    }
-
-                    first_shrinked_image[t][c] = sum / s;
-                    c++;
-                }
-                t++;
-            }
-
-            for (int i = 0; i < SIZE; ++i) {
-                for (int j = 0; j < SIZE; ++j) {
-
-                    if (i < 64 && j < 64) {
-                        image[i][j] = first_shrinked_image[i][j];
-                    } else {
-                        image[i][j] = 255;
-                    }
-                }
-            }
-        }
-
-
-    }
