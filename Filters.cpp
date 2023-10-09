@@ -25,22 +25,22 @@
 using namespace std;
 unsigned char image[SIZE][SIZE];
 
-void Filters ();
+void filters ();
 
 void loadImage ();
 void saveImage ();
-void Black_White ();
-void Invert_Image ();
-void MergeImage ();
-void FlipImage ();
-void Darken_and_Lighten ();
-void Rotate ();
-void Shrink ();
-void Blur ();
+void black_white ();
+void invert_image ();
+void merge_image ();
+void flip_image ();
+void darken_and_lighten ();
+void rotate_image ();
+void shrink_image ();
+void blur_image ();
 int main()
 {
     loadImage();
-    Filters();
+    filters();
     saveImage();
     return 0;
 }
@@ -73,7 +73,7 @@ void saveImage () {
 
 //_________________________________________
 
-void Filters() {
+void filters() {
 
     int n_of_filter;
 
@@ -83,50 +83,50 @@ void Filters() {
          << "(3) Merge Filter" << '\n'
          << "(4) Flip Image" << '\n'
          << "(5) Darken and Lighten Filter" << '\n'
-         << "(6) Rotate Filter" << '\n'
-         << "(9) Shrink Filter" << '\n'
-         << "(12) Blur Filter" << '\n';
+         << "(6) rotate_image Filter" << '\n'
+         << "(9) shrink_image Filter" << '\n'
+         << "(12) blur_image Filter" << '\n';
 
     cin >> n_of_filter;
 
     if (n_of_filter == 1)
     {
-        Black_White ();
+        black_white();
     }
     else if (n_of_filter == 2)
     {
-        Invert_Image();
+        invert_image();
     }
     else if (n_of_filter == 3)
     {
-        MergeImage();
+        merge_image();
     }
     else if (n_of_filter == 4)
     {
-        FlipImage();
+        flip_image();
     }
     else if (n_of_filter == 5)
     {
-        Darken_and_Lighten ();
+        darken_and_lighten();
     }
     else if (n_of_filter == 6)
     {
-        Rotate ();
+        rotate_image();
     }
     else if (n_of_filter == 9)
     {
-        Shrink ();
+        shrink_image();
     }
     else if (n_of_filter == 12)
     {
-        Blur ();
+        blur_image();
     }
 
 }
 
 //--------------------------------------------
 //this process make the image black and white only
-void Black_White (){
+void black_white (){
     for (int i = 0; i < SIZE; i++) {
         for (int j = 0; j< SIZE; j++) {
 
@@ -143,11 +143,11 @@ void Black_White (){
 }
 //--------------------------------------------
 
-void Invert_Image() {
+void invert_image() {
 
     for (int i = 0; i < SIZE; i++) {
         for (int j = 0; j< SIZE; j++) {
-
+//change pixel color to opposite degree to invert it
             image[i][j] = 255-image[i][j];
         }
     }
@@ -155,7 +155,7 @@ void Invert_Image() {
 
 //--------------------------------------------
 
-void MergeImage() {
+void merge_image() {
 
 //    A variable to store the second image to be merged with the first image
     unsigned char marge_image[SIZE][SIZE];
@@ -180,7 +180,7 @@ void MergeImage() {
 //--------------------------------------------
 
 // flip image (h)orizontly or (v)ertically(v)
-void FlipImage () {
+void flip_image () {
 
     cout << "Flip (H)orizontally or (V)ertically ? ";
 
@@ -211,7 +211,7 @@ void FlipImage () {
 
 //--------------------------------------------
 
-void Darken_and_Lighten () {
+void darken_and_lighten () {
 
 // Variable to store what the user wants (lighten or darken)
     char d_OR_l;
@@ -254,12 +254,11 @@ void Darken_and_Lighten () {
 
 //--------------------------------------------
 
-void Rotate () {
+void rotate_image () {
 
     int copy [SIZE][SIZE],angle;
-    cout<<"enter the angle you want to Rotate to eg. (90,180,270) : ";
-    cin>>angle;
 
+    //Make copy from the original image to use it in filter
     for (int i = 0; i < SIZE; i++) {
         for (int j = 0; j < SIZE; j++) {
 
@@ -267,26 +266,22 @@ void Rotate () {
         }
     }
 
+    //Take the angle that the user wants to rotate
+    cout<<"enter the angle you want to rotate_image to eg. (90,180,270) : ";
+    cin>>angle;
+
     if (angle==180){
 
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
-
+            //Make each pixel in image with the pixel on other side in copy
                 image[i][j]=copy[255-i][255-j];
             }
         }
     }
-    else if (angle==270){
 
-        for (int i = 0; i < SIZE; i++) {
-            for (int j = 0; j < SIZE; j++) {
-
-                image[i][j]=copy[255-j][255-i];
-            }
-        }
-    }
     else if (angle==90){
-
+     // Make each column from left side in image equal each row from above in copy
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
 
@@ -295,11 +290,21 @@ void Rotate () {
         }
     }
 
+    else if (angle==270){
+         // Make each column from the right side in image equal each row from above in copy
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+
+                image[i][j]=copy[255-j][255-i];
+            }
+        }
+    }
+
 }
 
 //--------------------------------------------
 
-void Shrink() {
+void shrink_image() {
 
     unsigned char shrinked_image[SIZE][SIZE];
     int shrink_by;
@@ -418,7 +423,7 @@ void Shrink() {
     }
 }
 
-void Blur () {
+void blur_image () {
 
     unsigned char blur_image[SIZE][SIZE];
 
