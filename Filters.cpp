@@ -12,6 +12,7 @@ unsigned char marge_image[SIZE][SIZE];
 void loadImage ();
 void saveImage ();
 void BW ();
+void flipImage ()
 void  Invert_Image();
 void MergeImage ();
 void Darken_and_Lighten_Image ();
@@ -21,7 +22,8 @@ void rotate();
 int main()
 {
     loadImage();
-//    BW();
+    BW();
+    flipImage ()
     Invert_Image();
 //    MergeImage();
 //    Darken_and_Lighten_Image();
@@ -59,33 +61,43 @@ void saveImage () {
 }
 
 //_________________________________________
- void doSomethingForImage (){
+//this process make the image black and white only
+
+ void BW (){
   for (int i = 0; i < SIZE; i++) {
     for (int j = 0; j< SIZE; j++) {
 
 
-        if (image[i][j] > 127)
+        if (image[i][j] > 127)//we put the avarge to check if pixel more than 127 to convert to white
             image[i][j] = 255;
         else
-            image[i][j] = 0;
+            image[i][j] = 0;//pixel turned to black if it less than 127
 
     }
    }
 }
 //--------------------------------------------
+// flip image horizontly(h) or vertically(v)
 void flipImage () {
 
     cout << "Enter if image horizontally(h) or vertically(v): ";
-    char hv;
+    char hv; // we enter an charachter to choice the type (v or h)
     cin >> hv;
-    if (hv == 'v')
+    if (hv == 'v')//if it vertical we make aloop in half of i and j as a matrix to swap
         for (int i = 0; i < SIZE / 2; i++) {
             for (int j = 0; j < SIZE; j++) {
+                //we will swap  column in the another direction but the same column so the i is changing and j still its number
                 swap(image[i][j], image[256 - i][j]);
             }
         }
+    if (hv == 'h')//if it horizontal we make aloop in half of j and i as a matrix
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE / 2; j++) {
+               //we will swap the row in the another direction so the j of the pixel  is changing and i still its number
+                swap (image[i][j] , image[i][256 - j]);
+            }
+        }
 }
-
 void  Invert_Image() {
    for (int i = 0; i < SIZE; i++) {
         for (int j = 0; j< SIZE; j++) {
