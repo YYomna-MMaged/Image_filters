@@ -37,16 +37,45 @@ void darken_and_lighten ();
 void rotate_image ();
 void shrink_image ();
 void blur_image ();
-
+void option();
+void enlarge();
+void shuffle();
 
 int main()
 {
     loadImage();
     filters();
-    saveImage();
+    option();
+    //filters();
+    //saveImage();
     return 0;
 }
-
+//_________________________________________
+void option(){
+    while (true) {
+        char c_of_option;
+        cout<< "if you need save image enter (S)ave , if you need stop edit enter (E)xit and if you need make more edit enter (M)ore :";
+        cin >> c_of_option;
+        if (c_of_option == 'S') {
+            saveImage();
+        }
+        else if (c_of_option == 'M') {
+            char y_or_n;
+            cout << "enter (Y)es if you need to edit the same image and (N)o if you need another : ";
+            cin >> y_or_n;
+            if (y_or_n == 'Y') {
+                filters();
+            }
+            else if(y_or_n=='N'){
+                loadImage();
+                filters();
+            }
+        }
+        else if(c_of_option=='E'){
+            break;
+        }
+    }
+}
 //_________________________________________
 void loadImage () {
     char imageFileName[100];
@@ -87,6 +116,7 @@ void filters() {
          << "(5) Darken and Lighten Filter" << '\n'
          << "(6) rotate_image Filter" << '\n'
          << "(9) shrink_image Filter" << '\n'
+         << "(10) shrink_image Filter" << '\n'
          << "(12) blur_image Filter" << '\n';
 
     cin >> n_of_filter;
@@ -115,15 +145,23 @@ void filters() {
     {
         rotate_image();
     }
+    else if (n_of_filter == 8)
+    {
+        enlarge();
+    }
     else if (n_of_filter == 9)
     {
         shrink_image();
+    }
+
+    else if (n_of_filter == 10)
+    {
+        shuffle();
     }
     else if (n_of_filter == 12)
     {
         blur_image();
     }
-
 }
 
 //--------------------------------------------
@@ -269,7 +307,7 @@ void rotate_image () {
     }
 
     //Take the angle that the user wants to rotate
-    cout<<"enter the angle you want to rotate_image to eg. (90,180,270) : ";
+    cout<<"Rotate (90),(180) or (270) : ";
     cin>>angle;
 
     if (angle==180){
@@ -481,4 +519,158 @@ void blur_image () {
         }
     }
 }
+//--------------------------------------------
+void shuffle_Filter(){
 
+    int copy [SIZE][SIZE],operation;
+
+    //Make copy from the original image to use it in filter
+    for (int i = 0; i < SIZE; i++) {
+        for (int j = 0; j < SIZE; j++) {
+
+            copy[i][j] = image[i][j];
+        }
+    }
+    cout <<"New order of quarters : ";
+    for (int k=1;k<=4;k++) {
+        int row ,column;
+        cin >> operation;
+        if (k==1){
+            column=0;
+            row=0;
+        }
+        else if (k==2){
+            column=127;
+            row=0;
+        }
+        else if (k==3){
+            column=0;
+            row=127;
+        }
+        else if (k==4){
+            column= 127;
+            row=127;
+        }
+        int copy_x=column;
+        if (operation == 1) {
+            for (int i = 0; i < 127; i++) {
+                column=copy_x;
+                for (int j = 0; j < 127; j++) {
+                    image[row][column] = copy[i][j];
+                    column++;
+
+                }
+                row++;
+
+            }
+
+        } else if (operation == 2) {
+
+            for (int i = 0; i < 127; i++) {
+                column=copy_x;
+                for (int j = 127; j < SIZE; j++) {
+                    image[row][column] = copy[i][j];
+                    column++;
+                }
+                row++;
+            }
+        } else if (operation == 3) {
+            for (int i = 127; i < SIZE; i++) {
+                column=copy_x;
+                for (int j = 0; j < 127; j++) {
+
+                    image[row][column] = copy[i][j];
+                    column++;
+                }
+                row++;
+            }
+        } else if (operation == 4) {
+            for (int i = 127; i < SIZE; i++) {
+                column=copy_x;
+                for (int j = 127; j < SIZE; j++) {
+
+                    image[row][column] = copy[i][j];
+
+                    column++;
+                }
+                row++;
+            }
+        }
+    }
+
+}
+//--------------------------------------------
+void enlarge(){
+
+    int copy [SIZE][SIZE],operation;
+
+    //Make copy from the original image to use it in filter
+    for (int i = 0; i < SIZE; i++) {
+        for (int j = 0; j < SIZE; j++) {
+
+            copy[i][j] = image[i][j];
+        }
+    }
+    cout<<"Which quarter to enlarge 1 ,2,3 or 4 ? "<<'\n';
+    cin >> operation;
+    int row=0;
+    if(operation == 1){
+        for (int i = 0; i < 128; i++) {
+            int column=0;
+            for (int j = 0; j < 128; j++) {
+
+                image[1 + row][column]= copy[i][j] ;
+                image[row][1 + column]= copy[i][j] ;
+                image[row][column]= copy[i][j] ;
+                image[1 + row][1 + column]= copy[i][j] ;
+                column++;column++;
+            }
+            row++;row++;
+        }
+
+    }
+    else if (operation == 2){
+        for (int i = 0; i < 128; i++) {
+            int x=0;
+            for (int j = 128; j < SIZE; j++) {
+
+                image[1 + row][x]= copy[i][j] ;
+                image[row][1 + x]= copy[i][j] ;
+                image[row][x]= copy[i][j] ;
+                image[1 + row][1 + x]= copy[i][j] ;
+                x++;x++;
+            }
+            row++;row++;
+        }
+    }
+    else if(operation == 3){
+        for (int i = 128; i < SIZE; i++) {
+            int x=0;
+            for (int j = 0; j < 128; j++) {
+
+                image[1 + row][x]= copy[i][j] ;
+                image[row][1 + x]= copy[i][j] ;
+                image[row][x]= copy[i][j] ;
+                image[1 + row][1 + x]= copy[i][j] ;
+                x++;x++;
+            }
+            row++;row++;
+        }
+    }
+    else if(operation == 4){
+        for (int i = 128; i < SIZE; i++) {
+            int x=0;
+            for (int j = 128; j < SIZE; j++) {
+
+                image[1 + row][x]= copy[i][j] ;
+                image[row][1 + x]= copy[i][j] ;
+                image[row][x]= copy[i][j] ;
+                image[1 + row][1 + x]= copy[i][j] ;
+                x++;x++;
+            }
+            row++;row++;
+        }
+    }
+
+}
+//--------------------------------------------
