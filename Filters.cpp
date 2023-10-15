@@ -1,4 +1,5 @@
 
+
 /*
  * Student 1 :
  *    name : Yomna Maged ALi
@@ -29,6 +30,7 @@ void filters ();
 
 void loadImage ();
 void saveImage ();
+void option ();
 void black_white ();
 void invert_image ();
 void merge_image ();
@@ -37,20 +39,18 @@ void darken_and_lighten ();
 void rotate_image ();
 void shrink_image ();
 void blur_image ();
-void option();
 void enlarge();
 void shuffle();
+void skew_vertical ();
 
 int main()
 {
     loadImage();
     filters();
     option();
-    //filters();
-    //saveImage();
     return 0;
 }
-//_________________________________________
+//_______________
 void option(){
     while (true) {
         char c_of_option;
@@ -114,10 +114,11 @@ void filters() {
          << "(3) Merge Filter" << '\n'
          << "(4) Flip Image" << '\n'
          << "(5) Darken and Lighten Filter" << '\n'
-         << "(6) rotate_image Filter" << '\n'
-         << "(9) shrink_image Filter" << '\n'
-         << "(10) shrink_image Filter" << '\n'
-         << "(12) blur_image Filter" << '\n';
+         << "(6) Rotate_image Filter" << '\n'
+         << "(9) Shrink_image Filter" << '\n'
+         << "(10) Shuffle_image Filter" << '\n'
+         << "(12) Blur_image Filter" << '\n'
+         << "(15) Skew_vertical Filter" << '\n';
 
     cin >> n_of_filter;
 
@@ -137,6 +138,7 @@ void filters() {
     {
         flip_image();
     }
+
     else if (n_of_filter == 5)
     {
         darken_and_lighten();
@@ -153,7 +155,6 @@ void filters() {
     {
         shrink_image();
     }
-
     else if (n_of_filter == 10)
     {
         shuffle();
@@ -162,6 +163,11 @@ void filters() {
     {
         blur_image();
     }
+    else if (n_of_filter == 15)
+    {
+        skew_vertical();
+    }
+
 }
 
 //--------------------------------------------
@@ -174,7 +180,7 @@ void black_white (){
             if (image[i][j] > 127)
                 image[i][j] = 255;
 
-            //pixel turned to black if it less than 127
+                //pixel turned to black if it less than 127
             else
                 image[i][j] = 0;
 
@@ -307,21 +313,21 @@ void rotate_image () {
     }
 
     //Take the angle that the user wants to rotate
-    cout<<"Rotate (90),(180) or (270) : ";
+    cout<<"enter the angle you want to rotate_image to eg. (90,180,270) : ";
     cin>>angle;
 
     if (angle==180){
 
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
-            //Make each pixel in image with the pixel on other side in copy
+                //Make each pixel in image with the pixel on other side in copy
                 image[i][j]=copy[255-i][255-j];
             }
         }
     }
 
     else if (angle==90){
-     // Make each column from left side in image equal each row from above in copy
+        // Make each column from left side in image equal each row from above in copy
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
 
@@ -331,7 +337,7 @@ void rotate_image () {
     }
 
     else if (angle==270){
-         // Make each column from the right side in image equal each row from above in copy
+        // Make each column from the right side in image equal each row from above in copy
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
 
@@ -519,6 +525,8 @@ void blur_image () {
         }
     }
 }
+
+
 //--------------------------------------------
 void shuffle_Filter(){
 
@@ -674,3 +682,73 @@ void enlarge(){
 
 }
 //--------------------------------------------
+
+void skew_vertical() {
+
+//    Take value of degree required for the work of the skew from user
+    double degree;
+    cin >> degree;
+
+//    Convert the for radians to circles
+    degree = (degree * (22/7)) / 180.0;
+
+    double extra = tan(degree) * 256.0; //This process gives us the number of rows to be added to create the degree deviation entered by the user
+    double step = extra / SIZE; //The number of steps to be decreased per column after each turn
+    double x = extra;
+
+//    An expanded 2D array to place images in after skewing and before shrinking
+    unsigned char skewed_image[SIZE + (int)extra][SIZE];
+
+//     Make all pixels white
+    for (int i = 0; i < SIZE + (int)extra; i++) {
+        for (int j = 0; j < SIZE; j++) {
+            skewed_image[i][j] = 255;
+        }
+    }
+
+//    Move the images and make them skewed while reducing the required displacement in each column
+    for (int i = 0; i < SIZE; i++) {
+        for (int j = 0; j < SIZE; j++) {
+            skewed_image[j + (int)x][i] = image[j][i];
+        }
+        x -= step;
+    }
+
+//    The percentage required to clear the image based on the increase in the number of rows
+    double shrink_rate = (SIZE + (int)extra) / 256.0;
+
+//    Transfer of image from "skew_image" to "image" after being shrunk
+    for (int i = 0; i < 256; i++) {
+        for (int j = 0; j < 256; j++) {
+            //the row that must be developed a certain number of each column (= shrink_rate) in each pixel to reduce the image
+            //the "beg_row" changes after each complete entire role on "j"
+            int beg_row = i * shrink_rate;
+            int sum = 0;
+
+//          We add the pixel values and put them in "sum"
+            for (int y = beg_row; y < beg_row + ceil(shrink_rate); y++) {
+                sum += skewed_image[y][j];
+            }
+
+//          and then divide the sum of the pixels by their number (= shrink_rate)
+//          and put it in the pixel opposite in the "image"
+            image[i][j] = sum / ceil(shrink_rate);
+        }
+    }
+//    int c = 0;
+//    for (int i = 0; i < SIZE; ++i) {
+//        for (int j = 0; j <= SIZE + (int)extra - ceil(step); j += ceil(step)) {
+//            int sum = 0;
+//
+//            for (int k = j; k <= j + ceil(step); ++k) {
+//                sum += skewed_image[k][i];
+//            }
+//
+//            image[c][i] = sum / ceil(step)+1;
+//        }
+//        c++;
+//    }
+
+
+
+}
