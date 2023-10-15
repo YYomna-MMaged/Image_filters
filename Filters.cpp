@@ -41,6 +41,7 @@ void shrink_image ();
 void blur_image ();
 void enlarge();
 void shuffle();
+void skew_horizontal();
 void skew_vertical ();
 
 int main()
@@ -115,9 +116,11 @@ void filters() {
          << "(4) Flip Image" << '\n'
          << "(5) Darken and Lighten Filter" << '\n'
          << "(6) Rotate_image Filter" << '\n'
+         << "(8) enlarge Filter" << '\n'
          << "(9) Shrink_image Filter" << '\n'
          << "(10) Shuffle_image Filter" << '\n'
          << "(12) Blur_image Filter" << '\n'
+         << "(14) Skew_horizontal Filter" << '\n'
          << "(15) Skew_vertical Filter" << '\n';
 
     cin >> n_of_filter;
@@ -163,10 +166,15 @@ void filters() {
     {
         blur_image();
     }
+    else if (n_of_filter == 14)
+    {
+        skew_horizontal();
+    }
     else if (n_of_filter == 15)
     {
         skew_vertical();
     }
+
 
 }
 
@@ -528,7 +536,7 @@ void blur_image () {
 
 
 //--------------------------------------------
-void shuffle_Filter(){
+void shuffle (){
 
     int copy [SIZE][SIZE],operation;
 
@@ -539,10 +547,12 @@ void shuffle_Filter(){
             copy[i][j] = image[i][j];
         }
     }
+    // made loop to get  four squares
     cout <<"New order of quarters : ";
     for (int k=1;k<=4;k++) {
         int row ,column;
         cin >> operation;
+        //make four if condition to determine the border of the square we will copy in
         if (k==1){
             column=0;
             row=0;
@@ -560,6 +570,7 @@ void shuffle_Filter(){
             row=127;
         }
         int copy_x=column;
+        // make another four if to determine witch square user need to copy
         if (operation == 1) {
             for (int i = 0; i < 127; i++) {
                 column=copy_x;
@@ -610,7 +621,7 @@ void shuffle_Filter(){
 //--------------------------------------------
 void enlarge(){
 
-    int copy [SIZE][SIZE],operation;
+    int copy [SIZE][SIZE],option;
 
     //Make copy from the original image to use it in filter
     for (int i = 0; i < SIZE; i++) {
@@ -619,10 +630,12 @@ void enlarge(){
             copy[i][j] = image[i][j];
         }
     }
+    //take the number of square that user need
     cout<<"Which quarter to enlarge 1 ,2,3 or 4 ? "<<'\n';
-    cin >> operation;
+    cin >> option;
     int row=0;
-    if(operation == 1){
+    //make four if to each square and make each pixel in the selected square in copy = four pixels in image
+    if(option == 1){
         for (int i = 0; i < 128; i++) {
             int column=0;
             for (int j = 0; j < 128; j++) {
@@ -631,52 +644,52 @@ void enlarge(){
                 image[row][1 + column]= copy[i][j] ;
                 image[row][column]= copy[i][j] ;
                 image[1 + row][1 + column]= copy[i][j] ;
-                column++;column++;
+                column+=2;
             }
-            row++;row++;
+            row+=2;
         }
 
     }
-    else if (operation == 2){
+    else if (option == 2){
         for (int i = 0; i < 128; i++) {
-            int x=0;
+            int column=0;
             for (int j = 128; j < SIZE; j++) {
 
-                image[1 + row][x]= copy[i][j] ;
-                image[row][1 + x]= copy[i][j] ;
-                image[row][x]= copy[i][j] ;
-                image[1 + row][1 + x]= copy[i][j] ;
-                x++;x++;
+                image[1 + row][column]= copy[i][j] ;
+                image[row][1 + column]= copy[i][j] ;
+                image[row][column]= copy[i][j] ;
+                image[1 + row][1 + column]= copy[i][j] ;
+                column+=2;
             }
-            row++;row++;
+            row+=2;
         }
     }
-    else if(operation == 3){
+    else if(option == 3){
         for (int i = 128; i < SIZE; i++) {
-            int x=0;
+            int column=0;
             for (int j = 0; j < 128; j++) {
 
-                image[1 + row][x]= copy[i][j] ;
-                image[row][1 + x]= copy[i][j] ;
-                image[row][x]= copy[i][j] ;
-                image[1 + row][1 + x]= copy[i][j] ;
-                x++;x++;
+                image[1 + row][column]= copy[i][j] ;
+                image[row][1 + column]= copy[i][j] ;
+                image[row][column]= copy[i][j] ;
+                image[1 + row][1 + column]= copy[i][j] ;
+                column+=2;
             }
-            row++;row++;
+            row+=2;
         }
     }
-    else if(operation == 4){
+    else if(option == 4){
         for (int i = 128; i < SIZE; i++) {
-            int x=0;
+            int column=0;
             for (int j = 128; j < SIZE; j++) {
 
-                image[1 + row][x]= copy[i][j] ;
-                image[row][1 + x]= copy[i][j] ;
-                image[row][x]= copy[i][j] ;
-                image[1 + row][1 + x]= copy[i][j] ;
-                x++;x++;
+                image[1 + row][column]= copy[i][j] ;
+                image[row][1 + column]= copy[i][j] ;
+                image[row][column]= copy[i][j] ;
+                image[1 + row][1 + column]= copy[i][j] ;
+                column+=2;
             }
-            row++;row++;
+            row+=2;
         }
     }
 
@@ -735,20 +748,54 @@ void skew_vertical() {
             image[i][j] = sum / ceil(shrink_rate);
         }
     }
-//    int c = 0;
-//    for (int i = 0; i < SIZE; ++i) {
-//        for (int j = 0; j <= SIZE + (int)extra - ceil(step); j += ceil(step)) {
-//            int sum = 0;
-//
-//            for (int k = j; k <= j + ceil(step); ++k) {
-//                sum += skewed_image[k][i];
-//            }
-//
-//            image[c][i] = sum / ceil(step)+1;
-//        }
-//        c++;
-//    }
 
 
+}
+//-----------------------------------------
 
+void skew_horizontal() {
+    double angle;
+    cout << "Please enter degree to skew right : ";
+    cin >> angle;
+    //calculate the offset of image and the rate of change
+    double offset = 256 * (tan((angle * 22) / (7 * 180)));
+    double rate_of_change = offset / 256, x = offset;
+    // make array with new size to make the skew
+    int new_image[SIZE][SIZE + (int) offset];
+    //make all pixel in new array white
+    for (int i = 0; i < SIZE; i++) {
+        for (int j = 0; j < SIZE + (int) offset; j++) {
+
+            new_image[i][j] = 255;
+
+        }
+    }
+    //copy the image in new image with skew starting from the offset
+    for (int i = 0; i < SIZE; i++) {
+        for (int j = 0; j < SIZE; j++) {
+
+            new_image[i][j + (int) x] = image[i][j];
+
+        }
+        //decrease the amount of offset
+        x = x - rate_of_change;
+    }
+
+    // calculate how many pixel will take to make shrink
+    double number_of_pixel = (256 + (int) offset) / 256.0;
+    for (int i = 0; i < SIZE; i++) {
+        for (int j = 0; j < SIZE; j++) {
+            int sum = 0;
+            //to determine the place of start index to make shrink to image
+            int start_of_shrink = j * number_of_pixel;
+            for (int t = start_of_shrink; t < (int) number_of_pixel + start_of_shrink; t++) {
+                // take summation of pixels
+                sum = sum + new_image[i][t];
+            }
+            //take the average of summation
+            image[i][j] = sum / (int) number_of_pixel;
+
+        }
+
+    }
 }
