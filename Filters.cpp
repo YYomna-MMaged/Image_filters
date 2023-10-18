@@ -25,7 +25,8 @@
 
 using namespace std;
 unsigned char image[SIZE][SIZE];
-
+unsigned char cropimage[SIZE][SIZE];
+unsigned char image2[SIZE][SIZE];
 void filters ();
 
 void loadImage ();
@@ -37,10 +38,13 @@ void merge_image ();
 void flip_image ();
 void darken_and_lighten ();
 void rotate_image ();
+void detect_image();
 void shrink_image ();
+void mirror();
 void blur_image ();
 void enlarge();
 void shuffle();
+void crop_image();
 void skew_horizontal();
 void skew_vertical ();
 
@@ -150,6 +154,10 @@ void filters() {
     {
         rotate_image();
     }
+    else if (n_of_filter == 7)
+    {
+        detect_image  ();
+    }
     else if (n_of_filter == 8)
     {
         enlarge();
@@ -158,13 +166,22 @@ void filters() {
     {
         shrink_image();
     }
+
     else if (n_of_filter == 10)
     {
         shuffle();
     }
+    else if (n_of_filter == 11)
+    {
+        mirror();
+    }
     else if (n_of_filter == 12)
     {
         blur_image();
+    }
+    else if (n_of_filter == 13)
+    {
+            crop_image();
     }
     else if (n_of_filter == 14)
     {
@@ -357,7 +374,26 @@ void rotate_image () {
 }
 
 //--------------------------------------------
+    void detect_image() {
+        black_white(); //we call a function we do to turn to black and white to make it easy to compare pixels
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                //we compare the pixel with the pixels around it to check if it same to turn to white or black if it differ
+                if (image[i][j] != image[i][j - 1] ||  image[i][j] != image[i][j+1] || image[i][j] != image[i +1][j] || image[i][j] != image[i -1][j] || image[i][j] != image[i -1][j-1] || image[i][j] != image[i+1][j+1])
+                    image2[i][j]=0;
 
+                else
+                    image2[i][j] = 255; // if it doesnt same pixel turned to white
+            }
+        }
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                image[i][j] = image2[i][j]; //we transfer the image to the new
+            }
+        }
+    }
+
+//--------------------------------------------
 void shrink_image() {
 
 //  2D array to store the image inside it during shrinking
@@ -495,7 +531,38 @@ void shrink_image() {
         }
     }
 }
+//------------------------------------------------
+    void mirror(){
+        cout<<"enter the type of mirror do you want left(1) right(2) upper(3) lower(4):  ";
+        int type;//we enter an int to choice the type we want to mirror
+        cin>>type;
+        if (type==1) // we make aloop in i and half of j to copy the left of image
+            for (int i =0 ; i <SIZE ; i++) {
+                for (int j =SIZE-1 / 2; j >0  ; j--) { // we start with j =SIZE-1/2 to copy the left of image
+                    image[i][j] = image[ i][256-j];
+                }
+            }
+        if (type==2)//we make aloop in i and half of j to copy the right of image
+            for (int i = 0; i < SIZE; i++) {
+                for (int j = 0; j < SIZE / 2; j++) {
+                    image[i][j] = image[ i][256-j];
+                }
+            }
+        if (type==3)//if the user choice 3 we make amirror to the upper side
+            for (int i =SIZE-1/2 ; i >0; i--) {// we start from the SIZE-1/2 to copy the upper side opsite of lower side
+                for (int j = 0; j < SIZE ; j++) {
+                    image[i][j] = image[256 - i][j];
+                }
+            }
+        if (type==4)//if the user choice 4 we make amirror to the lower side
+            for (int i = 0; i < SIZE/2; i++) {
+                for (int j = 0; j < SIZE ; j++) {
+                    image[i][j] = image[256 - i][j];
+                }
+            }
+    }
 
+//-------------------------------------------------
 void blur_image () {
 
 //  2D array to store the image inside it during process of blurring
@@ -695,7 +762,31 @@ void enlarge(){
 
 }
 //--------------------------------------------
+void crop_image() {
+    int x, y, l, w;//
 
+    cout << "please enter the x,y position to cut the image :\n ";
+    cin >> x >> y;//we enter an x , y to identify the position to cut an specific part from  the image
+    cout << "please enter the length(l)and width(w) :\n ";
+    cin >> l >> w;//we enter an l , w  to cut a square of length(l)and width(w) from  the image
+    for (int i = 0; i < SIZE; i++) {
+        for (int j = 0; j < SIZE; j++) {
+           cropimage[i][j] = 255;// we make a new white image to put in it
+        }
+    }
+
+    for (int i = x; i < x + l; i++) {//we put the first point = x (distance is l) so the next point is x+l
+        for (int j = y; j < x + w; j++) {// we put the opposite point = y (distance is w) so the next point is x+w
+            cropimage[i][j] = image[i][j];//we store in the new one
+        }
+    }
+    for (int i = 0; i < SIZE; i++) {
+        for (int j = 0; j < SIZE; j++) {
+            image[i][j] = cropimage[i][j];//copy the new image
+        }
+    }
+}
+//-----------------------------------------------
 void skew_vertical() {
 
 //    Take value of degree required for the work of the skew from user
