@@ -27,61 +27,35 @@ using namespace std;
 unsigned char image[SIZE][SIZE];
 unsigned char cropimage[SIZE][SIZE];
 unsigned char image2[SIZE][SIZE];
-void filters ();
+void menu ();
 
 void loadImage ();
 void saveImage ();
 void option ();
 void black_white ();
-void invert_image ();
-void merge_image ();
-void flip_image ();
+void invert ();
+void merge ();
+void flip ();
 void darken_and_lighten ();
-void rotate_image ();
-void detect_image();
-void shrink_image ();
+void rotate ();
+void detect();
+void shrink ();
 void mirror();
-void blur_image ();
+void blur ();
 void enlarge();
 void shuffle();
-void crop_image();
-void skew_horizontal();
-void skew_vertical ();
+void crop();
+void skew_right();
+void skew_up ();
 
 int main()
 {
     loadImage();
-    filters();
-    option();
+    menu();
     return 0;
 }
 //_______________
-void option(){
-    while (true) {
-        char c_of_option;
-        cout<< "if you need save image enter (S)ave , if you need stop edit enter (E)xit and if you need make more edit enter (M)ore :";
-        cin >> c_of_option;
-        if (c_of_option == 'S') {
-            saveImage();
-        }
-        else if (c_of_option == 'M') {
-            char y_or_n;
-            cout << "enter (Y)es if you need to edit the same image and (N)o if you need another : ";
-            cin >> y_or_n;
-            if (y_or_n == 'Y') {
-                filters();
-            }
-            else if(y_or_n=='N'){
-                loadImage();
-                filters();
-            }
-        }
-        else if(c_of_option=='E'){
-            break;
-        }
-    }
-}
-//_________________________________________
+
 void loadImage () {
     char imageFileName[100];
 
@@ -109,90 +83,67 @@ void saveImage () {
 
 //_________________________________________
 
-void filters() {
+void menu() {
 
-    int n_of_filter;
+    char n_of_filter;
+    while (n_of_filter != '0') {
+        cout << "Enter number of filter you need :" << '\n'
+             << "(1) Black & White image Filter " << '\n'
+             << "(2) Invert image Filter" << '\n'
+             << "(3) Merge image Filter" << '\n'
+             << "(4) Flip image Filter" << '\n'
+             << "(5) Darken and Lighten image Filter" << '\n'
+             << "(6) Rotate image Filter" << '\n'
+             << "(7) Detect image Filter" << '\n'
+             << "(8) enlarge image Filter" << '\n'
+             << "(9) Shrink image Filter" << '\n'
+             << "(a) Mirror 1/2 image Filter" << '\n'
+             << "(b) Shuffle image Filter" << '\n'
+             << "(c) Blur image Filter" << '\n'
+             << "(d) Crop image Filter" << '\n'
+             << "(e) Skew horizontal image Filter" << '\n'
+             << "(f) Skew vertical image Filter" << '\n'
+             << "(s) Save the image to a file" << '\n'
+             << "(0) Exit" << '\n';
 
-    cout << "Enter number of filter you need :" << '\n'
-         << "(1) Black & White Filter " << '\n'
-         << "(2) Invert Filter" << '\n'
-         << "(3) Merge Filter" << '\n'
-         << "(4) Flip Image" << '\n'
-         << "(5) Darken and Lighten Filter" << '\n'
-         << "(6) Rotate_image Filter" << '\n'
-         << "(8) enlarge Filter" << '\n'
-         << "(9) Shrink_image Filter" << '\n'
-         << "(10) Shuffle_image Filter" << '\n'
-         << "(12) Blur_image Filter" << '\n'
-         << "(14) Skew_horizontal Filter" << '\n'
-         << "(15) Skew_vertical Filter" << '\n';
+        cin >> n_of_filter;
 
-    cin >> n_of_filter;
-
-    if (n_of_filter == 1)
-    {
-        black_white();
+        if (n_of_filter == '1') {
+            black_white();
+        } else if (n_of_filter == '2') {
+            invert();
+        } else if (n_of_filter == '3') {
+            merge();
+        } else if (n_of_filter == '4') {
+            flip();
+        } else if (n_of_filter == '5') {
+            darken_and_lighten();
+        } else if (n_of_filter == '6') {
+            rotate();
+        } else if (n_of_filter == '7') {
+            detect();
+        } else if (n_of_filter == '8') {
+            enlarge();
+        } else if (n_of_filter == '9') {
+            shrink();
+        } else if (n_of_filter == 'a') {
+            mirror();
+        } else if (n_of_filter == 'b') {
+            shuffle();
+        } else if (n_of_filter == 'c') {
+            blur();
+        } else if (n_of_filter == 'd') {
+            crop();
+        } else if (n_of_filter == 'e') {
+            skew_right();
+        } else if (n_of_filter == 'f') {
+            skew_up();
+        } else if (n_of_filter == 's') {
+            saveImage();
+        } else if (n_of_filter == '0') {
+            break;
+        }
     }
-    else if (n_of_filter == 2)
-    {
-        invert_image();
-    }
-    else if (n_of_filter == 3)
-    {
-        merge_image();
-    }
-    else if (n_of_filter == 4)
-    {
-        flip_image();
-    }
-
-    else if (n_of_filter == 5)
-    {
-        darken_and_lighten();
-    }
-    else if (n_of_filter == 6)
-    {
-        rotate_image();
-    }
-    else if (n_of_filter == 7)
-    {
-        detect_image  ();
-    }
-    else if (n_of_filter == 8)
-    {
-        enlarge();
-    }
-    else if (n_of_filter == 9)
-    {
-        shrink_image();
-    }
-
-    else if (n_of_filter == 10)
-    {
-        shuffle();
-    }
-    else if (n_of_filter == 11)
-    {
-        mirror();
-    }
-    else if (n_of_filter == 12)
-    {
-        blur_image();
-    }
-    else if (n_of_filter == 13)
-    {
-            crop_image();
-    }
-    else if (n_of_filter == 14)
-    {
-        skew_horizontal();
-    }
-    else if (n_of_filter == 15)
-    {
-        skew_vertical();
-    }
-
-
 }
 
 //--------------------------------------------
@@ -214,7 +165,7 @@ void black_white (){
 }
 //--------------------------------------------
 
-void invert_image() {
+void invert() {
 
     for (int i = 0; i < SIZE; i++) {
         for (int j = 0; j< SIZE; j++) {
@@ -226,7 +177,7 @@ void invert_image() {
 
 //--------------------------------------------
 
-void merge_image() {
+void merge() {
 
 //    A variable to store the second image to be merged with the first image
     unsigned char marge_image[SIZE][SIZE];
@@ -251,7 +202,7 @@ void merge_image() {
 //--------------------------------------------
 
 // flip image (h)orizontly or (v)ertically(v)
-void flip_image () {
+void flip () {
 
     cout << "Flip (H)orizontally or (V)ertically ? ";
 
@@ -325,7 +276,7 @@ void darken_and_lighten () {
 
 //--------------------------------------------
 
-void rotate_image () {
+void rotate () {
 
     int copy [SIZE][SIZE],angle;
 
@@ -338,7 +289,7 @@ void rotate_image () {
     }
 
     //Take the angle that the user wants to rotate
-    cout<<"enter the angle you want to rotate_image to eg. (90,180,270) : ";
+    cout<<"enter the angle you want to rotate to eg. (90,180,270) : ";
     cin>>angle;
 
     if (angle==180){
@@ -374,7 +325,7 @@ void rotate_image () {
 }
 
 //--------------------------------------------
-    void detect_image() {
+    void detect() {
         black_white(); //we call a function we do to turn to black and white to make it easy to compare pixels
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
@@ -394,7 +345,7 @@ void rotate_image () {
     }
 
 //--------------------------------------------
-void shrink_image() {
+void shrink() {
 
 //  2D array to store the image inside it during shrinking
     unsigned char shrinked_image[SIZE][SIZE];
@@ -563,7 +514,7 @@ void shrink_image() {
     }
 
 //-------------------------------------------------
-void blur_image () {
+void blur () {
 
 //  2D array to store the image inside it during process of blurring
     unsigned char blur_image[SIZE][SIZE];
@@ -593,7 +544,7 @@ void blur_image () {
         }
     }
 
-//  move the image in (blur_image) to (image) to be displayed
+//  move the image in (blur) to (image) to be displayed
     for (int i = 0; i < SIZE; ++i) {
         for (int j = 0; j < SIZE; ++j) {
             image[i][j] = blur_image[i][j];
@@ -762,7 +713,7 @@ void enlarge(){
 
 }
 //--------------------------------------------
-void crop_image() {
+void crop() {
     int x, y, l, w;//
 
     cout << "please enter the x,y position to cut the image :\n ";
@@ -787,7 +738,7 @@ void crop_image() {
     }
 }
 //-----------------------------------------------
-void skew_vertical() {
+void skew_up() {
 
 //    Take value of degree required for the work of the skew from user
     double degree;
@@ -844,7 +795,7 @@ void skew_vertical() {
 }
 //-----------------------------------------
 
-void skew_horizontal() {
+void skew_right() {
     double angle;
     cout << "Please enter degree to skew right : ";
     cin >> angle;
